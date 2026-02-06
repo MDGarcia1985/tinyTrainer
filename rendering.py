@@ -179,13 +179,32 @@ def render_interactive_graph(nodes: Dict[str, Node], edges: List[tuple], view: s
         
         nodes.forEach(n => {{
             drawOctagon(n.x, n.y, nodeSize, n.color, n.fillcolor);
+            
+            ctx.save();
+            ctx.beginPath();
+            for (let i = 0; i < 8; i++) {{
+                const angle = (i * Math.PI / 4) - Math.PI / 8;
+                const px = n.x + (nodeSize - 4) * Math.cos(angle);
+                const py = n.y + (nodeSize - 4) * Math.sin(angle);
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }}
+            ctx.closePath();
+            ctx.clip();
+            
             ctx.fillStyle = n.fontcolor;
-            ctx.font = '11px Arial';
             ctx.textAlign = 'center';
+            ctx.font = (nodeSize >= 70 ? '9px Arial' : '11px Arial');
+            
             const lines = n.label.split('\\\\n');
+            const lineH = (nodeSize >= 70 ? 11 : 14);
+            const startY = n.y - ((lines.length - 1) * lineH) / 2;
+            
             lines.forEach((line, i) => {{
-                ctx.fillText(line, n.x, n.y - 10 + i * 14);
+                ctx.fillText(line, n.x, startY + i * lineH);
             }});
+            
+            ctx.restore();
         }});
     }}
     

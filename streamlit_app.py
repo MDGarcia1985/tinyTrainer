@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from models import ROLES, init_nodes, init_edges
-from simulation import tick_sim, set_role, activate_node
+from simulation import tick_sim, set_role, activate_node, clear_fault
 from rendering import render_interactive_graph, oled_panel
 
 
@@ -42,7 +42,7 @@ with colR:
 
     mods = [n for n in st.session_state.nodes.values() if n.kind == "tinyMod"]
     for n in mods:
-        c1, c2, c3 = st.columns([0.45, 0.35, 0.20])
+        c1, c2, c3, c4 = st.columns([0.35, 0.30, 0.18, 0.17])
         with c1:
             st.write(f"**{n.name}**")
         with c2:
@@ -52,6 +52,10 @@ with colR:
         with c3:
             if st.button("Activate", key=f"act_{n.name}"):
                 activate_node(st.session_state.nodes, n.name)
+        with c4:
+            if n.state == "FAULT":
+                if st.button("Clear", key=f"clr_{n.name}"):
+                    clear_fault(st.session_state.nodes, n.name)
 
     st.divider()
     st.subheader("tinyMod OLED preview")
