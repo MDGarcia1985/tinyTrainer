@@ -106,18 +106,18 @@ def activate_node(nodes: Dict[str, Node], node_name: str):
 # Rendering
 # ----------------------------
 def node_style(n: Node):
-    # Keep colors simple; concept view will simplify labels instead.
+    # Light mint green to grayscale gradient
     if n.state == "FAULT":
-        return {"color": "red", "fontcolor": "red"}
+        return {"color": "red", "fontcolor": "red", "fillcolor": "#FFE0E0"}
     if n.kind == "tinyCore":
-        return {"color": "darkgreen"}
+        return {"color": "#98D8C8", "fillcolor": "#C8F0E8"}
     if n.kind == "tinyMod":
-        return {"color": "deepskyblue3"}
+        return {"color": "#A8B8B0", "fillcolor": "#D8E8E0"}
     if n.kind == "tinyHub":
-        return {"color": "darkorange3"}
+        return {"color": "#909890", "fillcolor": "#C0C8C0"}
     if n.kind == "tinySwitch":
-        return {"color": "goldenrod3"}
-    return {"color": "gray"}
+        return {"color": "#787878", "fillcolor": "#B0B0B0"}
+    return {"color": "gray", "fillcolor": "#D0D0D0"}
 
 def label_for(n: Node, view: str):
     # view is "Concept" or "PLC"
@@ -150,12 +150,13 @@ def render_interactive_graph(nodes: Dict[str, Node], edges: List[tuple], view: s
             "x": n.x,
             "y": n.y,
             "color": sty.get("color", "gray"),
+            "fillcolor": sty.get("fillcolor", "white"),
             "fontcolor": sty.get("fontcolor", "black")
         })
     
     edges_data = []
     for (src, dst, lbl) in edges:
-        width = 3 if (nodes[src].bus_activity or nodes[dst].bus_activity) else 1
+        width = 5 if (nodes[src].bus_activity or nodes[dst].bus_activity) else 3
         edges_data.append({"src": src, "dst": dst, "label": lbl, "width": width})
     
     node_size = 70 if view == "PLC" else 52
@@ -187,7 +188,36 @@ def render_interactive_graph(nodes: Dict[str, Node], edges: List[tuple], view: s
         }}
     }}
     
-    function drawOctagon(x, y, size, color) {{
+    function pointInOctagon(px, py, x, y, size) {{
+        return Math.hypot(px - x, py - y) < size;
+    }}
+    
+    function checkNodeOverlap(x, y, exclude) {{
+        for(let n of nodes) {{
+            if(n !== exclude && Math.hypot(n.x - x, n.y - y) < nodeSize * 2) {{
+                return true;
+            }}
+        }}
+        return false;
+    }}
+    
+    function adjustCurveToAvoidNodes(src, dst, cx, cy) {{
+        for(let n of nodes) {{
+            if(n !== src && n !== dst) {{
+                if(Math.hypot(n.x - cx, n.y - cy) < nodeSize + 20) {{
+                    const dx = cx - n.x;
+                    const dy = cy - n.y;
+                    const dist = Math.hypot(dx, dy);
+                    const push = nodeSize + 20 - dist;
+                    cx += (dx / dist) * push;
+                    cy += (dy / dist) * push;
+                }}
+            }}
+        }}
+        return {{cx, cy}};
+    }}
+    
+    function drawOctagon(x, y, size, color, fillcolor) {{
         ctx.beginPath();
         for(let i = 0; i < 8; i++) {{
             const angle = (i * Math.PI / 4) - Math.PI / 8;
@@ -197,11 +227,31 @@ def render_interactive_graph(nodes: Dict[str, Node], edges: List[tuple], view: s
             else ctx.lineTo(px, py);
         }}
         ctx.closePath();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = fillcolor;
         ctx.fill();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        
+        // Draw connection ports (2 per side)
+        for(let i = 0; i < 8; i++) {{
+            const angle = (i * Math.PI / 4) - Math.PI / 8;
+            const baseX = x + size * Math.cos(angle);
+            const baseY = y + size * Math.sin(angle);
+            const perpAngle = angle + Math.PI / 2;
+            
+            for(let offset of [-0.3, 0.3]) {{
+                const portX = baseX + offset * size * 0.4 * Math.cos(perpAngle);
+                const portY = baseY + offset * size * 0.4 * Math.sin(perpAngle);
+                ctx.beginPath();
+                ctx.arc(portX, portY, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#228B22';
+                ctx.fill();
+                ctx.strokeStyle = '#1a5f1a';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }}
+        }}
     }}
     
     function draw() {{
@@ -212,24 +262,28 @@ def render_interactive_graph(nodes: Dict[str, Node], edges: List[tuple], view: s
         edges.forEach(e => {{
             const src = nodes.find(n => n.name === e.src);
             const dst = nodes.find(n => n.name === e.dst);
-            const mx = (src.x + dst.x) / 2;
-            const my = (src.y + dst.y) / 2;
+            let mx = (src.x + dst.x) / 2;
+            let my = (src.y + dst.y) / 2;
             const dx = dst.x - src.x;
             const dy = dst.y - src.y;
             const offset = Math.min(50, Math.sqrt(dx*dx + dy*dy) * 0.2);
-            const cx = mx - dy / Math.sqrt(dx*dx + dy*dy) * offset;
-            const cy = my + dx / Math.sqrt(dx*dx + dy*dy) * offset;
+            let cx = mx - dy / Math.sqrt(dx*dx + dy*dy) * offset;
+            let cy = my + dx / Math.sqrt(dx*dx + dy*dy) * offset;
+            
+            const adjusted = adjustCurveToAvoidNodes(src, dst, cx, cy);
+            cx = adjusted.cx;
+            cy = adjusted.cy;
             
             ctx.beginPath();
             ctx.moveTo(src.x, src.y);
             ctx.quadraticCurveTo(cx, cy, dst.x, dst.y);
-            ctx.strokeStyle = '#666';
+            ctx.strokeStyle = '#228B22';
             ctx.lineWidth = e.width;
             ctx.stroke();
         }});
         
         nodes.forEach(n => {{
-            drawOctagon(n.x, n.y, nodeSize, n.color);
+            drawOctagon(n.x, n.y, nodeSize, n.color, n.fillcolor);
             ctx.fillStyle = n.fontcolor;
             ctx.font = '11px Arial';
             ctx.textAlign = 'center';
@@ -250,8 +304,13 @@ def render_interactive_graph(nodes: Dict[str, Node], edges: List[tuple], view: s
     canvas.onmousemove = e => {{
         if(dragging) {{
             const rect = canvas.getBoundingClientRect();
-            dragging.x = e.clientX - rect.left;
-            dragging.y = e.clientY - rect.top;
+            const newX = e.clientX - rect.left;
+            const newY = e.clientY - rect.top;
+            
+            if(!checkNodeOverlap(newX, newY, dragging)) {{
+                dragging.x = newX;
+                dragging.y = newY;
+            }}
             draw();
         }}
     }};
