@@ -1,9 +1,9 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-from models import ROLES, init_nodes, init_edges
-from simulation import tick_sim, set_role, activate_node, clear_fault
-from rendering import render_interactive_graph, oled_panel
+from models.models import ROLES, init_nodes, init_edges
+from simulations.simulation import tick_sim, set_role, activate_node, clear_fault
+from ui.rendering import render_interactive_graph, oled_panel
 
 
 st.set_page_config(page_title="tinyTrainerKit Demo", layout="wide")

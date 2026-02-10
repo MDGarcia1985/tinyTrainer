@@ -1,6 +1,6 @@
 import random
 from typing import Dict
-from models import Node
+from models.models import Node
 
 
 def tick_sim(nodes: Dict[str, Node], activity_level: int):

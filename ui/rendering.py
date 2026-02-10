@@ -1,6 +1,6 @@
 import json
 from typing import Dict, List
-from models import Node
+from models.models import Node
 
 
 def node_style(n: Node):
