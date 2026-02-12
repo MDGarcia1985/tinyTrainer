@@ -1,0 +1,103 @@
+# Test Report — tiny_trainer
+
+## Summary
+
+**3 errors in 0.12s**
+
+## Environment
+
+- Repo: `tiny_trainer`
+- Python: `3.13.5`
+- Platform: `Windows-11-10.0.26200-SP0`
+- Started (UTC): `2026-02-10T22:34:36Z`
+- Finished (UTC): `2026-02-10T22:34:37Z`
+- Duration: `0.49s`
+- Exit code: `2`
+
+## Outcomes
+
+- Passed: **0**
+- Failed: **0**
+- Errors: **3**
+- Skipped: **0**
+- XFailed: **0**
+- XPassed: **0**
+- Warnings: **0**
+
+## Failures / Errors
+
+```text
+=================================== ERRORS ====================================
+______________ ERROR collecting tiny_trainer/tests/test_model.py ______________
+ImportError while importing test module 'C:\Users\micha\OneDrive\Documents\Mr.Industry_shareables\tiny_trainer\tests\test_model.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\anaconda3\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tiny_trainer\tests\test_model.py:10: in <module>
+    from models.models import Node, ROLES, STATES, init_nodes, init_edges
+E   ModuleNotFoundError: No module named 'models'
+_______________ ERROR collecting tiny_trainer/tests/test_sim.py _______________
+ImportError while importing test module 'C:\Users\micha\OneDrive\Documents\Mr.Industry_shareables\tiny_trainer\tests\test_sim.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\anaconda3\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tiny_trainer\tests\test_sim.py:15: in <module>
+    from models.models import Node
+E   ModuleNotFoundError: No module named 'models'
+_______________ ERROR collecting tiny_trainer/tests/test_ui.py ________________
+ImportError while importing test module 'C:\Users\micha\OneDrive\Documents\Mr.Industry_shareables\tiny_trainer\tests\test_ui.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\anaconda3\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tiny_trainer\tests\test_ui.py:13: in <module>
+    from models.models import Node
+E   ModuleNotFoundError: No module named 'models'
+=========================== short test summary info ===========================
+ERROR tiny_trainer/tests/test_model.py
+ERROR tiny_trainer/tests/test_sim.py
+ERROR tiny_trainer/tests/test_ui.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!
+3 errors in 0.12s
+```
+
+## Raw Output
+
+```text
+=================================== ERRORS ====================================
+______________ ERROR collecting tiny_trainer/tests/test_model.py ______________
+ImportError while importing test module 'C:\Users\micha\OneDrive\Documents\Mr.Industry_shareables\tiny_trainer\tests\test_model.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\anaconda3\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tiny_trainer\tests\test_model.py:10: in <module>
+    from models.models import Node, ROLES, STATES, init_nodes, init_edges
+E   ModuleNotFoundError: No module named 'models'
+_______________ ERROR collecting tiny_trainer/tests/test_sim.py _______________
+ImportError while importing test module 'C:\Users\micha\OneDrive\Documents\Mr.Industry_shareables\tiny_trainer\tests\test_sim.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\anaconda3\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tiny_trainer\tests\test_sim.py:15: in <module>
+    from models.models import Node
+E   ModuleNotFoundError: No module named 'models'
+_______________ ERROR collecting tiny_trainer/tests/test_ui.py ________________
+ImportError while importing test module 'C:\Users\micha\OneDrive\Documents\Mr.Industry_shareables\tiny_trainer\tests\test_ui.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\anaconda3\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tiny_trainer\tests\test_ui.py:13: in <module>
+    from models.models import Node
+E   ModuleNotFoundError: No module named 'models'
+=========================== short test summary info ===========================
+ERROR tiny_trainer/tests/test_model.py
+ERROR tiny_trainer/tests/test_sim.py
+ERROR tiny_trainer/tests/test_ui.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!
+3 errors in 0.12s
+```

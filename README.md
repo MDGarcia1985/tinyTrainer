@@ -36,8 +36,8 @@ tinyTrainer is intentionally **educational-first**, with industrial realism.
 ## Project Structure
 
 ```text
-tinytrainer/
-├─ __main__.py          # Entry point (python -m tinytrainer)
+tiny_trainer/
+├─ __main__.py          # Entry point (python -m tiny_trainer)
 ├─ models/              # Core data structures and system state
 ├─ simulations/         # System behavior, ticks, and fault logic
 ├─ ui/                  # Rendering + Streamlit interface
