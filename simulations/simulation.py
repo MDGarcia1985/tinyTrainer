@@ -18,7 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import random
 from typing import Dict
-from ..models.models import Node
+
+from models.models import Node
 
 
 def tick_sim(nodes: Dict[str, Node], activity_level: int):

@@ -8,8 +8,9 @@ from pathlib import Path
 
 
 def main() -> int:
-    root = Path(__file__).resolve().parent
-    app = root / "app_streamlit.py"  # <-- your file
+    ui_dir = Path(__file__).resolve().parent
+    project_root = ui_dir.parent
+    app = ui_dir / "app_streamlit.py"
 
     # Pick a port. 8501 is Streamlit default; using an explicit port is predictable.
     port = 8501
@@ -31,7 +32,7 @@ def main() -> int:
 
     proc = subprocess.Popen(
         cmd,
-        cwd=str(root),
+        cwd=str(project_root),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         creationflags=creationflags,

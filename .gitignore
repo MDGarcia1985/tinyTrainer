@@ -1,0 +1,36 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Build and packaging output
+build/
+dist/
+*.egg-info/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Streamlit local config
+.streamlit/secrets.toml
+
+# Logs and generated reports
+*.log
+data/test_reports/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -13,6 +13,34 @@ over abstraction-heavy frameworks.
 
 ---
 
+## Run the App
+
+From the repository root, install Streamlit if needed:
+
+```bash
+python -m pip install streamlit
+```
+
+Launch the app:
+
+```bash
+python ui/launcher.py
+```
+
+The launcher starts the Streamlit app on port `8501` and opens:
+
+```text
+http://localhost:8501
+```
+
+You can also run the Streamlit app directly:
+
+```bash
+python -m streamlit run ui/app_streamlit.py
+```
+
+---
+
 ## What tinyTrainer Is
 
 - A **software-defined training environment** for modular embedded systems
@@ -44,6 +72,7 @@ tiny_trainer/
 ├─ tools/               # Developer utilities (license headers, scripts)
 ├─ archive/             # Experiments and retired prototypes
 └─ README.md
+```
 
 ---
 
